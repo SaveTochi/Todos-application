@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-
-<html>
-  <head></head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Todo application</title>
+  </head>
   <body>
-    <h1>Todos</h1>
-    <input id="search-text" type="text" placeholder="Filter todos" />
-    <label>
-      <input type="checkbox" id="hide-completed" /> Hide completed
-    </label>
-    <div id="todos"></div>
-    <form id="new-todo">
-      <input type="text" placeholder="Something to do" name="text" />
-      <button>Add Todo</button>
-    </form>
+    <div class="container">
+      <div class="heading">
+        <h1 class="heading-text">Todos application</h1>
+      </div>
+      <div class="filters">
+        <input
+          id="filters__search-text"
+          type="text"
+          placeholder="  Filter todos"
+        />
+        <label>
+          <input type="checkbox" id="hide-completed" /> Hide completed
+        </label>
+      </div>
+      <div class="content"></div>
+      <div class="form">
+        <form id="new-todo">
+          <input type="text" placeholder="  Something to do" name="text" />
+          <button>Add Todo</button>
+        </form>
+      </div>
+    </div>
     <script src="scripts/todo-uuid.js"></script>
     <script src="scripts/todo-functions.js"></script>
     <script src="scripts/todo-app.js"></script>

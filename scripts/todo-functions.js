@@ -30,23 +30,59 @@ const renderTodos = function(todos, filters) {
     return !todo.completed;
   });
 
-  document.querySelector("#todos").innerHTML = "";
+  document.querySelector(".content").innerHTML = "";
   document
-    .querySelector("#todos")
+    .querySelector(".content")
     .appendChild(generateSummaryDOM(incompleteTodos));
 
   filteredTodos.forEach(function(todo) {
     const todoItem = generateTodosDOM(todo);
-    document.querySelector("#todos").appendChild(todoItem);
+    document.querySelector(".content").appendChild(todoItem);
   });
 };
 
-// This generate todos DOM elements
+//Remove todo with remove todo button
+const removeTodos = function(id) {
+  const todosIndex = todos.findIndex(todo => {
+    return todo.id === id;
+  });
+  if (todosIndex > -1) {
+    todos.splice(todosIndex, 1);
+  }
+};
+
+//Toggle the selected todo's completed property with its checkbox
+const toggleCompleted = function(id) {
+  const todo = todos.find(todo => {
+    return todo.id === id;
+  });
+
+  if (todo !== undefined) {
+    todo.completed = !todo.completed;
+  }
+};
+
+//Generates the DOM element structure
 const generateTodosDOM = todo => {
   const todoContainer = document.createElement("div");
   const todoCompletedToggle = document.createElement("input");
   const todoText = document.createElement("span");
   const removeTodoButton = document.createElement("button");
+
+  //Set the todo's checkbox to show completed or not
+  todoCompletedToggle.checked = todo.completed;
+
+  todoCompletedToggle.addEventListener("change", e => {
+    toggleCompleted(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters);
+  });
+
+  removeTodoButton.addEventListener("click", () => {
+    removeTodos(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters);
+  });
 
   todoCompletedToggle.setAttribute("type", "checkbox");
 
