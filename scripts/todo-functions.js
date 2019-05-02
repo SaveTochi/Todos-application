@@ -16,8 +16,8 @@ const getSavedTodos = () => {
 };
 
 // Render todos application data
-const renderTodos = function(todos, filters) {
-  const filteredTodos = todos.filter(function(todo) {
+const renderTodos = (todos, filters) => {
+  const filteredTodos = todos.filter(todo => {
     const searchTextMatch = todo.text
       .toLowerCase()
       .includes(filters.searchText.toLowerCase());
@@ -26,36 +26,30 @@ const renderTodos = function(todos, filters) {
     return searchTextMatch && hideCompletedMatch;
   });
 
-  const incompleteTodos = filteredTodos.filter(function(todo) {
-    return !todo.completed;
-  });
+  const incompleteTodos = filteredTodos.filter(todo => !todo.completed);
 
   document.querySelector(".content").innerHTML = "";
   document
     .querySelector(".content")
     .appendChild(generateSummaryDOM(incompleteTodos));
 
-  filteredTodos.forEach(function(todo) {
+  filteredTodos.forEach(todo => {
     const todoItem = generateTodosDOM(todo);
     document.querySelector(".content").appendChild(todoItem);
   });
 };
 
 //Remove todo with remove todo button
-const removeTodos = function(id) {
-  const todosIndex = todos.findIndex(todo => {
-    return todo.id === id;
-  });
+const removeTodos = id => {
+  const todosIndex = todos.findIndex(todo => todo.id === id);
   if (todosIndex > -1) {
     todos.splice(todosIndex, 1);
   }
 };
 
-//Toggle the selected todo's completed property with its checkbox
-const toggleCompleted = function(id) {
-  const todo = todos.find(todo => {
-    return todo.id === id;
-  });
+//Toggle the selected todo's completed property with it's checkbox
+const toggleCompleted = id => {
+  const todo = todos.find(todo => todo.id === id);
 
   if (todo !== undefined) {
     todo.completed = !todo.completed;
