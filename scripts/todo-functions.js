@@ -6,11 +6,9 @@ const saveTodos = todos => {
 // Get saved todos data from local storage
 const getSavedTodos = () => {
   const todosJSON = localStorage.getItem("todos");
-
-  if (todosJSON !== null) {
-    const todos = JSON.parse(todosJSON);
-    return todos;
-  } else {
+  try {
+    return todosJSON !== null ? JSON.parse(todosJSON) : [];
+  } catch {
     return [];
   }
 };
@@ -28,14 +26,14 @@ const renderTodos = (todos, filters) => {
 
   const incompleteTodos = filteredTodos.filter(todo => !todo.completed);
 
-  document.querySelector(".content").innerHTML = "";
+  document.querySelector("#content").innerHTML = "";
   document
-    .querySelector(".content")
+    .querySelector("#content")
     .appendChild(generateSummaryDOM(incompleteTodos));
 
   filteredTodos.forEach(todo => {
     const todoItem = generateTodosDOM(todo);
-    document.querySelector(".content").appendChild(todoItem);
+    document.querySelector("#content").appendChild(todoItem);
   });
 };
 
@@ -58,40 +56,51 @@ const toggleCompleted = id => {
 
 //Generates the DOM element structure
 const generateTodosDOM = todo => {
-  const todoContainer = document.createElement("div");
-  const todoCompletedToggle = document.createElement("input");
+  const todoEl = document.createElement("label");
+  const containerEl = document.createElement("div");
+  const completedToggle = document.createElement("input");
   const todoText = document.createElement("span");
-  const removeTodoButton = document.createElement("button");
+  const removeButton = document.createElement("button");
 
-  //Set the todo's checkbox to show completed or not
-  todoCompletedToggle.checked = todo.completed;
-
-  todoCompletedToggle.addEventListener("change", e => {
+  //Setup the todo's checkbox to toggle completed
+  completedToggle.setAttribute("type", "checkbox");
+  completedToggle.checked = todo.completed;
+  containerEl.appendChild(completedToggle);
+  completedToggle.addEventListener("change", e => {
     toggleCompleted(todo.id);
     saveTodos(todos);
     renderTodos(todos, filters);
   });
 
-  removeTodoButton.addEventListener("click", () => {
+  //Seup the todo text
+  todoText.textContent = todo.text;
+  containerEl.appendChild(todoText);
+
+  //Setup container
+  todoEl.classList.add("list-item");
+  containerEl.classList.add("list-item__container");
+  todoEl.appendChild(containerEl);
+
+  //Setup the remove button
+  removeButton.textContent = "remove";
+  removeButton.classList.add("button", "button--text");
+  todoEl.appendChild(removeButton);
+  removeButton.addEventListener("click", () => {
     removeTodos(todo.id);
     saveTodos(todos);
     renderTodos(todos, filters);
   });
-
-  todoCompletedToggle.setAttribute("type", "checkbox");
-
-  todoText.textContent = todo.text;
-  removeTodoButton.textContent = "X";
-
-  todoContainer.appendChild(todoCompletedToggle);
-  todoContainer.appendChild(todoText);
-  todoContainer.appendChild(removeTodoButton);
-
-  return todoContainer;
+  return todoEl;
 };
 
 const generateSummaryDOM = todos => {
   const summary = document.createElement("h2");
   summary.textContent = `You have ${todos.length} todos left`;
   return summary;
+};
+
+const generateWarningText = () => {
+  const warningText = document.querySelector(".warning");
+  warningText.textContent = "Please enter text";
+  warningText.style.color = "red";
 };
